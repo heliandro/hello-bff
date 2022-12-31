@@ -1,6 +1,5 @@
 import express, { Router } from 'express'
 
-const port = process.env.PORT || 3000
 const app = express()
 const router = Router()
 
@@ -15,6 +14,4 @@ router.get('/healthz', (_, res) => {
 app.use(express.json())
 app.use(router)
 
-app.listen(port, () => {
-    console.log(`Server started on port ${port}`)
-})
+export default app
