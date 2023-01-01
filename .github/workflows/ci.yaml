@@ -1,4 +1,4 @@
-name: Hello Bff Workflow
+name: Continuous Integration - Workflow
 on:
   push:
     branches:
