@@ -1,8 +1,5 @@
 name: Continuous Integration - Workflow
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
