@@ -31,6 +31,8 @@ jobs:
       - name: Add Release Tag
         id: release
         uses: rymndhng/release-on-push-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_prefix: 'v'
           bump_version_scheme: 'minor'
