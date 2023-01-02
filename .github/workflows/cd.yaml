@@ -28,6 +28,13 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
 
+      - name: Repository to Dockerfile
+        id: tools
+        uses: actions/checkout@v3
+        with:
+          repository: heliandro/${{ secrets.REPOSITORY_DOCKERFILES }}
+          path: dockerfiles
+
       - name: Add Release Tag
         id: release
         uses: rymndhng/release-on-push-action@master
@@ -39,6 +46,8 @@ jobs:
 
       - name: Check Output Parameters
         run: |
+          echo "Get tools Outputs ${{ steps.tools.outputs }}"
+          echo "Get tools Outputs ${{ steps.tools.outputs.path }}"
           echo "Get repository name ${{ github.event.repository.name }}"
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got release version ${{ steps.release.outputs.version }}"
@@ -57,7 +66,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: https://github.com/heliandro/${{ secrets.REPOSITORY_DOCKERFILES }}/nodejs/Dockerfile
+          file: dockerfiles/nodejs/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
           
