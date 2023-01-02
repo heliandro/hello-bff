@@ -24,6 +24,8 @@ jobs:
   deploy:
     needs: tests
     runs-on: ubuntu-latest
+    env:
+      DOCKERFILE_DIRECTORY: dockerfiles
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
@@ -32,8 +34,8 @@ jobs:
         id: tools
         uses: actions/checkout@v3
         with:
-          repository: heliandro/${{ secrets.REPOSITORY_DOCKERFILES }}
-          path: dockerfiles
+          repository: ${{ github.repository_owner }}/${{ secrets.REPOSITORY_DOCKERFILES }}
+          path: ${{ env.DOCKERFILE_DIRECTORY }}
 
       - name: Add Release Tag
         id: release
@@ -46,9 +48,9 @@ jobs:
 
       - name: Check Output Parameters
         run: |
-          echo "Get tools Outputs ${{ steps.tools.outputs }}"
-          echo "Get tools Outputs ${{ steps.tools.outputs.path }}"
+          echo "Get repository owner ${{ github.repository_owner }}"
           echo "Get repository name ${{ github.event.repository.name }}"
+          echo "Get Dockerfile directory ${{ env.DOCKERFILE_DIRECTORY }}"
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got release version ${{ steps.release.outputs.version }}"
 
@@ -66,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: dockerfiles/nodejs/Dockerfile
+          file: ${{ env.DOCKERFILE_DIRECTORY }}/nodejs/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
           
