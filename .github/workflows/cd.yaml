@@ -18,8 +18,14 @@ jobs:
       - name: Install packages
         run: npm install
 
-      - name: Unit tests
+      - name: Test and coverage
         run: npm run test
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
     needs: tests
@@ -48,7 +54,6 @@ jobs:
 
       - name: Check Output Parameters
         run: |
-          echo "Get repository owner ${{ github.repository_owner }}"
           echo "Get repository name ${{ github.event.repository.name }}"
           echo "Get Dockerfile directory ${{ env.DOCKERFILE_DIRECTORY }}"
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"

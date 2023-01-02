@@ -1,8 +1,7 @@
 name: Continuous Integration - Workflow
 on:
   pull_request:
-    branches:
-      - master
+    types: [opened, synchronize, reopened]
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -18,11 +17,11 @@ jobs:
       - name: Install packages
         run: npm install
 
-      - name: Unit tests
+      - name: Test and coverage
         run: npm run test
 
-      # - name: SonarQube analysis
-      #   uses: SonarSource/sonarqube-scan-action@master
-      #   env:
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
