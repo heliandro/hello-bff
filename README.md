@@ -1,6 +1,6 @@
 # Hello Bff
 
-Microsservico demo "Hello Bff" em Node.js com Express.js.
+BFF demo em Node.js com Express.js.
 
 ## Setup
 
