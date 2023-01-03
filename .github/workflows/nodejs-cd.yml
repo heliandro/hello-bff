@@ -31,16 +31,17 @@ jobs:
     needs: tests
     runs-on: ubuntu-latest
     env:
+      REPOSITORY_DOCKERFILES: devops-dockerfiles
       DOCKERFILE_DIRECTORY: dockerfiles
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
 
-      - name: Repository to Dockerfile
+      - name: Repository Dockerfiles
         id: tools
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.repository_owner }}/${{ secrets.REPOSITORY_DOCKERFILES }}
+          repository: ${{ github.repository_owner }}/${{ env.REPOSITORY_DOCKERFILES }}
           path: ${{ env.DOCKERFILE_DIRECTORY }}
 
       - name: Add Release Tag
@@ -76,4 +77,3 @@ jobs:
           file: ${{ env.DOCKERFILE_DIRECTORY }}/nodejs/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
-          
