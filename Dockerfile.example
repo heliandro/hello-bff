@@ -20,4 +20,4 @@ FROM node:18.12.1-alpine3.16 as Final
 USER node
 WORKDIR /app
 COPY --chown=node:node --from=Stage-2 /app ./
-CMD ["node", "dist/app.js"]
+CMD ["node", "dist/server.js"]
