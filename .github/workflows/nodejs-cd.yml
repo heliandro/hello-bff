@@ -82,7 +82,7 @@ jobs:
         id: helmchart
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.repository_owner }}/${{ env.REPOSITORY_DOCKERFILES }}
+          repository: ${{ github.repository_owner }}/helm-chart-${{ github.event.repository.name }}
           path: infraestructure
 
       - name: Update Helm Chart Repository
