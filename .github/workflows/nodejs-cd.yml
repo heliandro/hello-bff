@@ -84,6 +84,7 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/helm-chart-hello-bff
           path: infraestructure
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Helm Chart Repository
         uses: fjogeleit/yaml-update-action@main
