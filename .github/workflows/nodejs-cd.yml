@@ -30,8 +30,7 @@ jobs:
   deploy:
     needs: tests
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+    permissions: write-all
     env:
       REPOSITORY_DOCKERFILES: devops-dockerfiles
       DOCKERFILE_DIRECTORY: dockerfiles
