@@ -96,9 +96,9 @@ jobs:
           value: ${{ steps.release.outputs.tag_name }}
           repository: ${{ github.repository_owner }}/helm-chart-hello-bff
           masterBranchName: main
-          createPR: true
-          branch: feature/update-image-version
-          targetBranch: main
-          title: 'Github Actions - Update image version'
+          createPR: false
+          branch: main
+          #targetBranch: main
+          #title: 'Github Actions - Update image version'
           message: 'update image version to ${{ steps.release.outputs.tag_name }}'
           token: ${{ secrets.GITHUB_TOKEN }}
