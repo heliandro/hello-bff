@@ -82,19 +82,19 @@ jobs:
         id: helmchart
         uses: actions/checkout@v3
         with:
-          repository: ${{ github.repository_owner }}/helm-chart-${{ github.event.repository.name }}
+          repository: ${{ github.repository_owner }}/helm-chart-hello-bff
           path: infraestructure
 
       - name: Update Helm Chart Repository
         uses: fjogeleit/yaml-update-action@main
         with:
-          workdir: infraestructure
+          workDir: infraestructure
           valueFile: 'values.yaml'
           propertyPath: 'repository.tag'
           value: ${{ steps.release.outputs.tag_name }}
-          repository: ${{ github.repository_owner }}/helm-chart-${{ github.event.repository.name }}
-          targetBranch: 'main'
+          repository: ${{ github.repository_owner }}/helm-chart-hello-bff
+          targetBranch: main
           createPR: true
-          description: 'Github Actions - Update image version'
+          title: 'Github Actions - Update image version'
           message: 'Update image version to ${{ steps.release.outputs.tag_name }}'
           token: ${{ secrets.GITHUB_TOKEN }}
