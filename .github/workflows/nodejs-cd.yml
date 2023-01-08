@@ -87,18 +87,12 @@ jobs:
           path: infraestructure
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update Helm Chart Repository
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          workDir: infraestructure
-          valueFile: 'values.yaml'
-          propertyPath: 'repository.tag'
-          value: ${{ steps.release.outputs.tag_name }}
-          repository: ${{ github.repository_owner }}/helm-chart-hello-bff
-          masterBranchName: main
-          createPR: false
-          branch: main
-          #targetBranch: main
-          #title: 'Github Actions - Update image version'
-          message: 'update image version to ${{ steps.release.outputs.tag_name }}'
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update version to Helm Chart Repository
+        run: |
+          cd ./infraestructure
+          sed -i "s/tag: v[0-9]*\.[0-9]*\.[0-9]*/tag: ${{ steps.release.outputs.tag_name }}/" values.yaml
+          git add values.yaml
+          git config user.name github-actions
+          git config user.email actions@github.com
+          git commit -m "update version to ${{ steps.release.outputs.tag_name }}"
+          git push origin main
