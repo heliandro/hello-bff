@@ -79,7 +79,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
 
-      - name: Checkout Target Helm Chart Repository
+      - name: Checkout Helm Chart Repository
         id: helmchart
         uses: actions/checkout@v3
         with:
@@ -87,7 +87,7 @@ jobs:
           path: infraestructure
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update version to Helm Chart Repository
+      - name: Update Helm Chart Repository
         run: |
           cd ./infraestructure
           sed -i "s/tag: v[0-9]*\.[0-9]*\.[0-9]*/tag: ${{ steps.release.outputs.tag_name }}/" values.yaml
