@@ -37,7 +37,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
 
-      - name: Repository Dockerfiles
+      - name: Checkout Dockerfiles Repository
         id: tools
         uses: actions/checkout@v3
         with:
@@ -77,3 +77,24 @@ jobs:
           file: ${{ env.DOCKERFILE_DIRECTORY }}/nodejs/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
+
+      - name: Checkout Target Helm Chart Repository
+        id: helmchart
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository_owner }}/${{ env.REPOSITORY_DOCKERFILES }}
+          path: infraestructure
+
+      - name: Update Helm Chart Repository
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          workdir: infraestructure
+          valueFile: 'values.yaml'
+          propertyPath: 'repository.tag'
+          value: ${{ steps.release.outputs.tag_name }}
+          repository: ${{ github.repository_owner }}/helm-chart-${{ github.event.repository.name }}
+          targetBranch: 'main'
+          createPR: true
+          description: 'Github Actions - Update image version'
+          message: 'Update image version to ${{ steps.release.outputs.tag_name }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
