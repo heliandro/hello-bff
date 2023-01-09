@@ -94,7 +94,7 @@ jobs:
           cd ./infraestructure
           sed -i "s/tag: v[0-9]*\.[0-9]*\.[0-9]*/tag: ${{ steps.release.outputs.tag_name }}/" values.yaml
           git add values.yaml
-          git config user.name github-actions
-          git config user.email actions@github.com
+          git config user.name "Github Actions"
+          git config user.email "actions@github.com"
           git commit -m "update version to ${{ steps.release.outputs.tag_name }}"
           git push origin main
