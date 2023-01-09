@@ -1,5 +1,7 @@
-name: Nodejs CD
+name: Nodejs Pipeline
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - master
@@ -29,8 +31,8 @@ jobs:
 
   deploy:
     needs: tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    permissions: write-all
     env:
       REPOSITORY_DOCKERFILES: devops-dockerfiles
       DOCKERFILE_DIRECTORY: dockerfiles
