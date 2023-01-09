@@ -33,19 +33,9 @@ jobs:
     needs: tests
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    env:
-      REPOSITORY_DOCKERFILES: devops-dockerfiles
-      DOCKERFILE_DIRECTORY: dockerfiles
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
-
-      - name: Checkout Dockerfiles Repository
-        id: tools
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.repository_owner }}/${{ env.REPOSITORY_DOCKERFILES }}
-          path: ${{ env.DOCKERFILE_DIRECTORY }}
 
       - name: Add Release Tag
         id: release
@@ -54,32 +44,40 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_prefix: 'v'
-          bump_version_scheme: 'minor'
+          bump_version_scheme: 'patch'
+
+      - name: Checkout Dockerfiles Repository
+        id: tools
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository_owner }}/devops-dockerfiles
+          path: dockerfiles
 
       - name: Check Output Parameters
         run: |
           echo "Get repository name ${{ github.event.repository.name }}"
-          echo "Get Dockerfile directory ${{ env.DOCKERFILE_DIRECTORY }}"
           echo "Got tag name ${{ steps.release.outputs.tag_name }}"
           echo "Got release version ${{ steps.release.outputs.version }}"
 
-      - name: Setup Docker
+      - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Docker login
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2.1.0
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }} 
 
       - name: Docker Build and Push
         id: docker_build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v3.2.0
         with:
           context: .
-          file: ${{ env.DOCKERFILE_DIRECTORY }}/nodejs/Dockerfile
+          file: dockerfiles/nodejs/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
+          tags: | 
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ steps.release.outputs.tag_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest
 
       - name: Checkout Helm Chart Repository
         id: helmchart
