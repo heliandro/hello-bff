@@ -85,7 +85,7 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/helm-chart-hello-bff
           path: infraestructure
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WORKFLOW_ACTIONS_TOKEN }}
 
       - name: Update Helm Chart Repository
         run: |
