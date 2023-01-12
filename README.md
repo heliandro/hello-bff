@@ -6,42 +6,34 @@ BFF demo em Node.js com Express.js.
 
 Tenha o [Docker](https://docs.docker.com/install/) e o Node v18 instalados.
 
-Instale as dependencias:
+## Build e Run
+
+Para buildar a aplicação, execute:
 
 ```bash
-npm install
+docker-compose build
 ```
-
-## Rodando a aplicação
 
 Para rodar a aplicação, execute:
 
 ```bash
-npm run dev
+docker-compose up
 ```
 
-## Rodando com o Docker
+## Upload de arquivos
 
-Para rodar a aplicação com o Docker, execute:
+Para fazer upload de arquivos, execute:
 
 ```bash
-docker build -t heliandro/hello-bff:dev .
-docker run --rm -p 3000:80 --name hello-bff heliandro/hello-bff:dev
+curl -X POST http://localhost:3000/upload \
+     -F file=@/home/username/Pictures/my-image.jpg
 ```
 
-## Build para produção e rodando
+## Download de arquivos
 
-Para buildar a aplicação para produção, execute:
-
-```bash
-docker build -t heliandro/hello-bff:0.1.0 . -f Dockerfile.prod
-docker run --rm -p 3000:80 --name hello-bff heliandro/hello-bff:0.1.0
-```
-
-## Envio para o Docker Hub
-
-Para enviar a imagem para o Docker Hub, execute:
+Para fazer download de arquivos, execute:
 
 ```bash
-docker push heliandro/hello-bff:0.1.0
+curl -X GET http://localhost:3000/download/file-name.extension \
+    -O --output-dir /home/usuario/Downloads
 ```
