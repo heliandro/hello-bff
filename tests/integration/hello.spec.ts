@@ -7,6 +7,6 @@ describe('GET /hello', () => {
         const agent = request(app)
         const response = await agent.get('/hello')
 
-        expect(response.body).toEqual({ msg: 'Hi Mom!' })
+        expect(response.body).toEqual({ message: 'Hi Mom!' })
     });
 });
