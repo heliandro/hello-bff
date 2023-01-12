@@ -16,7 +16,7 @@ RUN npm ci --omit=dev
 
 # Build Stage 3
 # This stage builds the final image for production with no root user
-FROM node:18.12.1-alpine3.16 as Final
+FROM node:18.12.1-alpine3.16
 USER node
 WORKDIR /app
 COPY --chown=node:node --from=Stage-2 /app ./
