@@ -22,7 +22,8 @@ export class FileMiddleware {
         const { filename } = request.params
         console.log(`File ${filename} has requested to download`)
 
-        const filePath = `${process.env.STORAGE_PATH}/${filename}`
+        const storagePath = process.env.STORAGE_PATH || 'storage'
+        const filePath = storagePath + '/' + filename
 
         if (!fs.existsSync(filePath)) {
             console.error(`File ${filename} does not exist!`)

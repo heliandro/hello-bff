@@ -46,7 +46,10 @@ class CustomMulterConfiguration {
         console.log(`Allowed extensions: ${allowedExtensions}`)
         return {
             storage: this.storage(storagePath),
-            fileFilter: this.fileFilter(allowedExtensions)
+            fileFilter: this.fileFilter(allowedExtensions),
+            limits: {
+                fileSize: 1024 * 1024 * 100 // 100 MB
+            }
         }
     }
 }
