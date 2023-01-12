@@ -22,14 +22,16 @@ export class FileMiddleware {
         const { filename } = request.params
         console.log(`File ${filename} has requested to download`)
 
-        if (!fs.existsSync(`${process.env.STORAGE_PATH}/${filename}`)) {
+        const filePath = `${process.env.STORAGE_PATH}/${filename}`
+
+        if (!fs.existsSync(filePath)) {
             console.error(`File ${filename} does not exist!`)
             return response.status(404).json({ message: `File ${filename} does not exist!` })
         }
 
         response.setHeader('Content-Disposition', `attachment; filename=${filename}`)
 
-        const stream = fs.createReadStream(`${process.env.STORAGE_PATH}/${filename}`)
+        const stream = fs.createReadStream(filePath)
         stream.pipe(response)
     }
 }
